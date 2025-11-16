@@ -29,3 +29,10 @@ def chat(user_input: str, messages:List[Dict[str,str]], client:OpenAI, model_nam
         
     except Exception as e:   
         return f"Error with API:{str(e)}"
+
+def summarize_messages(messages: List[Dict[str,str]])->List[Dict[str,str]]:
+    """Summarize older messages to save tokens"""
+    summary = "Previous conversation summarized:" + "   ".join([
+        m["content"][:50]+ "..." for m in messages[-5:] 
+    ])   
+    return [{"role":"system", "content": summary}] + messages[-5:]
